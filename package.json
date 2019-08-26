@@ -1,0 +1,32 @@
+{
+  "name": "virtual-dom-typescript",
+  "version": "0.0.1",
+  "description": "virtual dom algorithm",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runnerSnail/virtual-dom-typescript.git"
+  },
+  "keywords": [
+    "react",
+    "virtual",
+    "dom",
+    "algorithm",
+    "typescript"
+  ],
+  "author": "runnerSnail",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/runnerSnail/virtual-dom-typescript/issues"
+  },
+  "homepage": "https://github.com/runnerSnail/virtual-dom-typescript#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "typescript": "^3.5.3"
+  }
+}
