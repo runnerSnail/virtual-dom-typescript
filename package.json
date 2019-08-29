@@ -4,8 +4,9 @@
   "description": "virtual dom algorithm",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --reporter spec",
-    "build": "tsc"
+    "test": "tsc && mocha  dist/test/*.js",
+    "build": "tsc",
+    "fix": "tslint --fix -c tslint.json './lib/**/*.ts' './test/**/*.ts' 'index.ts'"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,8 @@
   },
   "homepage": "https://github.com/runnerSnail/virtual-dom-typescript#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.0",
+    "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "typescript": "^3.5.3"
