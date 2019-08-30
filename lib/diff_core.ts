@@ -21,12 +21,11 @@ function getMovesPath(oldList: any[], newList: any[], key: any): IMovePath {
      */
     const children = getChildren(oldList, newList, key, oldMap, newMap);
     const simulateList = children.slice(0);
-
-
-
+    removeOperator(simulateList);
+    simulateListToNewlist(oldList, newList, key, simulateList, moves);
     return {
-        children: [],
-        moves: [],
+        children,
+        moves,
     };
 }
 /**
@@ -74,8 +73,8 @@ function removeOperator(simulateList: any[]) {
 
 /**
  * 添加移除操作
- * @param index 
- * @param moves 
+ * @param index
+ * @param moves
  */
 function remove(index: number, moves: any[]) {
     moves.push({
@@ -84,13 +83,73 @@ function remove(index: number, moves: any[]) {
     });
 }
 
+function simulateListToNewlist(oldList: any[], newList: any[], key: string, simulateList: any[], moves: any) {
+    let i = 0;
+    let j = 0;
+    let item;
+    let itemKey;
+    const oldKeyIndex: IlistTransform = makeKeyIndexAndGetFree(oldList, key).keyAndIndex;
+    while (i < newList.length) {
+        item = newList[i]
+        itemKey = getItemKey(item, key);
+
+        const simulateItem = simulateList[j];
+        const simulateItemKey = getItemKey(simulateItem, key);
+
+        if (simulateItem) {
+            if (itemKey === simulateItemKey) {
+                j++;
+            } else {
+                // new item, just inesrt it
+                if (!oldKeyIndex.hasOwnProperty(itemKey)) {
+                    insert(i, item, moves)
+                } else {
+                    // if remove current simulateItem make item in right place
+                    // then just remove it
+                    const nextItemKey = getItemKey(simulateList[j + 1], key)
+                    if (nextItemKey === itemKey) {
+                        remove(i, moves);
+                        removeSimulateList(j, simulateList)
+                        j++; // after removing, current j is right, just jump to next one
+                    } else {
+                        // else insert item
+                        insert(i, item, moves);
+                    }
+                }
+            }
+        } else {
+            insert(i, item, moves);
+        }
+        i++;
+    }
+
+    // if j is not remove to the end, remove all the rest item
+
+    let k = simulateList.length - j;
+    while (j++ < simulateList.length) {
+        k--;
+        remove(k + i, moves);
+    }
+}
+
 /**
  * 变更模拟操作列表
- * @param index 
- * @param simulateList 
+ * @param index
+ * @param simulateList
  */
 function removeSimulateList(index: number, simulateList: any[]) {
     simulateList.splice(index, 1);
+}
+/**
+ * 插入节点
+ */
+function insert(index: number, item: any, moves: any[]) {
+    const move: any = {
+        index,
+        item,
+        type: 1,
+    };
+    moves.push(move);
 }
 
 /**
@@ -129,6 +188,7 @@ function getItemKey(item: any, key: any) {
         ? item[key]
         : key(item);
 }
+
 export default {
     getChildren,
     makeKeyIndexAndGetFree,
