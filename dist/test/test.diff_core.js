@@ -65,7 +65,36 @@ function BFS(root) {
     }
 }
 var node = new BinaryTreeNode();
+/**
+ * 根据move转换列表
+ * @param oldList
+ * @param newList
+ * @param moves
+ */
+function transform(oldList, newList, moves) {
+    moves.forEach(function (move) {
+        if (move.type === 0) {
+            oldList.splice(move.index, 1);
+        }
+        else if (move.type === 1) {
+            oldList.splice(move.index, 0, move.item);
+        }
+        else {
+            throw Error("不存在的操作");
+        }
+    });
+    chai_1.expect(oldList).to.deep.members(newList);
+}
 describe("test diff", function () {
+    it("test diff algorithm", function () {
+        var before = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+        var after = [{ id: 2 }, { id: 3 }, { id: 1 }];
+        // 检测
+        var diff = diff_core_1.default.getMovesPath(before, after, "id");
+        // 需要5步操作可以转化为原来的数组;
+        chai_1.expect(diff.moves.length).equal(5);
+        transform(before, after, diff.moves);
+    });
     it("test create node", function () {
         // 检测创建树
         var arr = ["A", "B", "D", "#", "#", "E", "#", "#", "C", "F", "#", "#", "G", "#", "#"];

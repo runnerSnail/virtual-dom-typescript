@@ -21,7 +21,7 @@ function getMovesPath(oldList: any[], newList: any[], key: any): IMovePath {
      */
     const children = getChildren(oldList, newList, key, oldMap, newMap);
     const simulateList = children.slice(0);
-    removeOperator(simulateList);
+    removeOperator(simulateList, moves);
     simulateListToNewlist(oldList, newList, key, simulateList, moves);
     return {
         children,
@@ -59,11 +59,11 @@ function getChildren(oldList: any[], newList: any[], key: any, oldMap: IlistTran
 /**
  * 移除不存在的节点
  */
-function removeOperator(simulateList: any[]) {
+function removeOperator(simulateList: any[], moves: any[]) {
     let i = 0;
     while (i < simulateList.length) {
         if (simulateList[i] === null) {
-            remove(i, simulateList);
+            remove(i, moves);
             removeSimulateList(i, simulateList);
         } else {
             i++;
@@ -191,5 +191,6 @@ function getItemKey(item: any, key: any) {
 
 export default {
     getChildren,
+    getMovesPath,
     makeKeyIndexAndGetFree,
 };

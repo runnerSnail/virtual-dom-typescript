@@ -53,7 +53,39 @@ function BFS(root: any) {
 
 const node = new BinaryTreeNode();
 
+/**
+ * 根据move转换列表
+ * @param oldList
+ * @param newList
+ * @param moves
+ */
+function transform(oldList: any[], newList: any[], moves: any[]) {
+    moves.forEach((move: any) => {
+        if (move.type === 0) {
+            oldList.splice(move.index, 1);
+        } else if (move.type === 1) {
+            oldList.splice(move.index, 0, move.item);
+        } else {
+            throw Error("不存在的操作");
+        }
+    });
+    expect(oldList).to.deep.members(
+        newList,
+    );
+}
+
 describe("test diff", () => {
+    it("test diff algorithm", () => {
+        const before = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+        const after = [{ id: 2 }, { id: 3 }, { id: 1 }];
+        // 检测
+        const diff = diff_core.getMovesPath(before, after, "id");
+        // 需要5步操作可以转化为原来的数组;
+        expect(diff.moves.length).equal(5);
+        transform(before, after, diff.moves);
+
+    });
+
     it("test create node", () => {
         // 检测创建树
         const arr = ["A", "B", "D", "#", "#", "E", "#", "#", "C", "F", "#", "#", "G", "#", "#"];
@@ -61,6 +93,7 @@ describe("test diff", () => {
         // @ts-ignore
         expect(node.left.right.val).equal("E");
     });
+
     it("test DFS", () => {
         DFS(node);
         // 深度优先遍历
